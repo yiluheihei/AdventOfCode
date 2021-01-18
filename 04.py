@@ -1,5 +1,5 @@
 import re
-imporst string
+import string
 
 with open("input/04_input.txt") as f:
     dat = f.read()

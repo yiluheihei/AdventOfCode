@@ -15,7 +15,7 @@ def get_seat_id(seat):
             new_seat.append("1")
     
     row = int("".join(new_seat[:7]), 2)
-    col = int("".join(new_seat[7:]), 2)
+    col = int("".join(new_seat[7:]), 2)x
     
     id = row * 8 + col
     return id

@@ -23,7 +23,7 @@ def get_ingre_allerg(ingres, allergs):
     
     ingre_allergs = {}
     
-    # allergen and the corresponding integs
+    # allergen and the corresponding multiple integs by intersection
     for alg in all_allergs:
         alg_idx = [i for i, term in enumerate(allergs) if alg in term]
         sub_ings = [t for i, t in enumerate(ingres) if i in alg_idx]

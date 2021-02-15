@@ -105,16 +105,4 @@ def part2(black_tiles, day = 100):
 # 4242
 part2(black_tiles)
 
-
-
-
-
-
-        
-        
-        
-        
-    
-        
-        
     

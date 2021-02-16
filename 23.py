@@ -1,4 +1,4 @@
-## part 1    
+################################## first version    
 
 def move(cups, step):
     # curr_cup = cups[0]
@@ -44,7 +44,8 @@ def part1():
 part1()
 
 
-### part 2
+############################################ second version use dictionary
+
 def move2(cups, step, part1 = True):
     if not part1:
         cups = cups + list(range(max(cups) + 1, 10 ** 6 + 1))
@@ -73,8 +74,6 @@ def move2(cups, step, part1 = True):
                 destination = destination - 1
         
         
-        # cups_dic[next_1] = next_2
-        # cups_dic[next_2] = next_3
         cups_dic[curr_cup] = cups_dic[next_3]
         cups_dic[next_3] = cups_dic[destination]
         cups_dic[destination] = next_1
@@ -98,9 +97,74 @@ def move2(cups, step, part1 = True):
 cups = [int(x) for x in list("219347865")] 
 # part1: 36472598
 move2(cups, 100)
-# part 2:
-move2(cups, 10 ** 7, False)
 
+
+############################ third version for better performance
+# https://github.com/aribchowdhury/AdventOfCode2020/blob/master/day23/day23.py
+
+class Node:
+    __slots__ = ['val', 'next']
+    
+    def __init__(self, val, next):
+        self.val = val
+        self.next = next
+
+def move3(cups, step):
+    n = len(cups)
+    
+    # node dict
+    node_dict = {i: Node(i, None) for i in range(1, n + 1)}
+    for i in range(n):
+        node_dict[cups[i]].next = node_dict[cups[(i + 1) % n]]
+    
+    curr_cup = node_dict[cups[0]]
+    
+    for _ in range(step):
+        next_1 = curr_cup.next
+        next_2 = next_1.next
+        next_3 = next_2.next
+        curr_cup.next = next_3.next
         
+        destination = curr_cup.val
+        while destination in (curr_cup.val, next_1.val, next_2.val, next_3.val):
+            if destination > 1:
+                destination = destination - 1
+            else:
+                destination = n
+        destination = node_dict[destination]
+        next_3.next = destination.next
+        destination.next = next_1
+        
+        curr_cup = curr_cup.next
         
     
+    return curr_cup, node_dict
+        
+
+def update_part1(cups, step):
+    _, node_dict = move3(cups, step)
+    p = node_dict[1]
+    res = []
+    for _ in range(len(cups) - 1):
+        p = p.next
+        res.append(str(p.val))
+        
+    return "".join(res)
+        
+
+cups = [int(x) for x in list('219347865')]
+# 36472598
+update_part1(cups, 100)
+
+
+def part2(cups, step):
+    _, node_dict = move3(cups, step)
+    p = node_dict[1]
+    
+    return p.next.val * p.next.next.val
+
+
+new_cups =  cups + list(range(max(cups) + 1, 10 ** 6 + 1))
+# 90481418730
+part2(new_cups, 10 ** 7)
+        
